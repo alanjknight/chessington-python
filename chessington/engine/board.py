@@ -46,6 +46,10 @@ class Board:
 
         return board
 
+    @staticmethod
+    def valid_square (row,col): 
+        return row >= 0 and row <= 7 and col >=0 and col <=7
+
     def set_piece(self, square, piece):
         """
         Places the piece at the given position on the board.

@@ -35,9 +35,43 @@ class Pawn(Piece):
     """
 
     def get_available_moves(self, board):
-        return []
+        squares_y_axis=1
+        if self.player.name=='BLACK':
+            squares_y_axis=-1
+        
+        cur_pos = board.find_piece(self)
+        checkIfUnmoved = (cur_pos.row == 1 and self.player.name == 'WHITE') or (cur_pos.row == 6 and self.player.name == 'BLACK')
 
+        poss_moves = []
+        board_cells=[]
+        for row in range(0,len(board.board)):
+            for cell in range(0,len(board.board[row])):
+                board_cells.append([row,cell])
 
+        #can move 1 space forward
+        if board.valid_square (cur_pos.row + squares_y_axis, cur_pos.col):
+            row_increment = cur_pos.row + squares_y_axis
+        else:
+            row_increment = cur_pos.row
+
+        pawn=(Square.at(row_increment,cur_pos.col)) #move forward one square
+        if board.get_piece(pawn) == None and pawn not in poss_moves:
+            poss_moves.append(pawn)
+       
+
+        #can move 2 spaces forward if not yet moved, as long as its not obstructed 
+        if checkIfUnmoved:
+            if not board.get_piece(Square.at(cur_pos.row+1 * squares_y_axis, cur_pos.col)):
+            
+                if board.valid_square(cur_pos.row+2 * squares_y_axis, cur_pos.col):
+                    pawn = Square.at(cur_pos.row + 2 * squares_y_axis, cur_pos.col)
+                else:
+                    pawn = Square.at(cur_pos.row, cur_pos.col)
+
+                if board.get_piece(pawn) == None and pawn not in poss_moves:
+                    poss_moves.append(pawn)
+        return poss_moves
+        
 class Knight(Piece):
     """
     A class representing a chess knight.
